@@ -164,3 +164,4 @@ This simulation homework focuses on `fork.py`, a simple process creation simulat
    > 문제의 의도
    >
    > process tree를 보고 actions를 예측하도록 유도한다. 다만 Action은 예측하기 쉬우나 Order는 그렇지 않다.
+

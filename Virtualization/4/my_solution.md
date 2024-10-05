@@ -174,9 +174,11 @@ This program, `process-run.py`, allows you to see how process states change as p
 
    
 
-   > 크게 도움이 되는 문제인지는 모르겠다, 특히 -s 옵션에 대해서 이해가 되지 않고, 
+   > ~~크게 도움이 되는 문제인지는 모르겠다, 특히 -s 옵션에 대해서 이해가 되지 않고~~, 
    >
    > `SWITCH_ON_END` 와 `IO_RUN_LATER` flags가 효율을 떨어뜨리는 것 같으로 보인다.
+   >
+   > => feedback: seed 값은 설정하여 다양한 결과를 확인할 수 있다. 동일한 seed는 동일한 결과를 보장한다.
 
    여러 가지 커맨드를 동작시켜본 결과,
 
