@@ -156,7 +156,45 @@
 
 7. Write a program that creates a child process, and then in the child closes standard output (`STDOUT_FILENO`). What happens if the child calls `printf()` to print some output after closing the descriptor?
 
-- The result of `printf()` won't show in the terminal.
+   ~~~c
+   #include <stdio.h>
+   #include <unistd.h>
+   #include <sys/types.h>
+   #include <sys/wait.h>
+   #include <stdlib.h>
+   
+   int main() {
+   
+   	pid_t rc = fork();
+   	if (rc == -1) {
+   		perror("fork failed");
+   		exit(1);
+   	} else if(rc == 0) {
+   		// child process
+   		if (close(STDOUT_FILENO) == -1) {
+   			perror("close failed");
+   			exit(1);
+   		}
+   		printf("Hello, world.\n");
+           exit(0);
+   	} else {
+   		// parent process
+   		wait(NULL);
+           printf("child process completed.\n");
+   	}
+   
+   
+   	return 0;
+   }
+   ~~~
+
+   `printf()`의 결과 어떠한 것도 출력되지 않는다.
+
+   > 문제의 의도
+   >
+   > 1. STDOUT_FILENO은 하나의 file descriptor(`1`)에 불과하며 `close()` system call로 닫을 수 있다는 것을 확인할 수 있다
+   > 2. `printf()`함수는 내재적으로 표준출력(file descriptor: 1)을 통해 데이터를 보내는 것이다.
+   >    - 즉, `printf("Hello, world.\n")`와 `fprintf(stdout, “Hello, world.\n”)`는 동일하다.
 
 
 
@@ -164,4 +202,66 @@
 
 8. Write a program that creates two children, and connects the standard output of one to the standard input of the other, using the `pipe()` system call.
 
-   >  About `pipe()`
+   ```c
+   #include <stdio.h>
+   #include <unistd.h>
+   #include <sys/wait.h>
+   #include <sys/types.h>
+   #include <stdlib.h>
+   
+   int main() {
+   
+   	int fd[2];
+   	if (pipe(fd) == -1) {
+   		// pipe failed.
+   		perror("piping failed.\n");
+   		exit(1);
+   	}
+   
+   	pid_t child1 = fork();
+   	if (child1 == -1) {
+   		// fork failed.
+   		perror("fork child1 failed.\n");
+   		exit(1);
+   	} else if(child1 == 0) {
+   		close(fd[0]);
+   		dup2(fd[1], STDOUT_FILENO);
+   		close(fd[1]);
+   
+   		execlp("ls", "ls", NULL);
+   		// execlp failed.
+   		perror("execlp ls failed.");
+   		exit(1);
+   	}
+   
+   	pid_t child2 = fork();
+   	if (child2 == -1) {
+   		// fork failed.
+   		perror("fork child1 failed.\n");
+   		exit(1);
+   	} else if(child2 == 0) {
+   		close(fd[1]);
+   		dup2(fd[0], STDIN_FILENO);
+   		close(fd[0]);
+   
+   		execlp("wc", "wc", NULL);
+   		// execlp wc failed.
+   		perror("execlp wc failed.");
+   		exit(1);
+   	}
+   	// parent process
+   	close(fd[0]);
+   	close(fd[1]);
+   
+   	waitpid(child1, NULL, 0);
+   	waitpid(child2, NULL, 0);
+   
+   	return 0;
+   }
+   ```
+   
+   - `fork()` system call을 사용하여 두 개의 자식 프로세스를 생성한다.
+   - `pipe()` system call을 사용하여 프로세스 간의 통신 채널을 만든다.
+   - `dup2()` system call을 사용하여 표준 입출력을 리다이렉트한다.
+     - fd table을 조작: STDIN_FILENO`, `STDOUT_FILENO`이 이 파이프의 읽기/쓰기 끝을 가리키도록 변경한다.
+   - 프로세스 간의 동기화: 부모 프로세스는 `waitpid()` 를 사용하여 자식 프로세스를 기다린다.
