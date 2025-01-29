@@ -1,0 +1,37 @@
+system_call.c:22:5: error: use of undeclared identifier 'cpu_set_t'
+    cpu_set_t cpu_set;
+    ^
+system_call.c:23:5: error: implicit declaration of function 'CPU_ZERO' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+    CPU_ZERO(&cpu_set);
+    ^
+system_call.c:23:15: error: use of undeclared identifier 'cpu_set'; did you mean 'cgetset'?
+    CPU_ZERO(&cpu_set);
+              ^~~~~~~
+              cgetset
+/Users/isntsoo/Downloads/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdlib.h:293:6: note: 'cgetset' declared here
+int      cgetset(const char *);
+         ^
+system_call.c:24:5: error: implicit declaration of function 'CPU_SET' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+    CPU_SET(0, &cpu_set);
+    ^
+system_call.c:24:17: error: use of undeclared identifier 'cpu_set'; did you mean 'cgetset'?
+    CPU_SET(0, &cpu_set);
+                ^~~~~~~
+                cgetset
+/Users/isntsoo/Downloads/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdlib.h:293:6: note: 'cgetset' declared here
+int      cgetset(const char *);
+         ^
+system_call.c:26:9: error: implicit declaration of function 'sche_setaffinity' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+    if (sche_setaffinity(0, sizeof(cpu_set), &cpu_set) == -1) {
+        ^
+system_call.c:26:36: error: use of undeclared identifier 'cpu_set'
+    if (sche_setaffinity(0, sizeof(cpu_set), &cpu_set) == -1) {
+                                   ^
+system_call.c:26:47: error: use of undeclared identifier 'cpu_set'; did you mean 'cgetset'?
+    if (sche_setaffinity(0, sizeof(cpu_set), &cpu_set) == -1) {
+                                              ^~~~~~~
+                                              cgetset
+/Users/isntsoo/Downloads/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdlib.h:293:6: note: 'cgetset' declared here
+int      cgetset(const char *);
+         ^
+8 errors generated.
