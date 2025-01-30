@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
     CPU_ZERO(&cpu_set);
     CPU_SET(0, &cpu_set);
 
-    if (sche_setaffinity(0, sizeof(cpu_set), &cpu_set) == -1) {
+    if (sched_setaffinity(0, sizeof(cpu_set), &cpu_set) == -1) {
         perror("sched_setaffinity failed.");
         exit(1);
     }
