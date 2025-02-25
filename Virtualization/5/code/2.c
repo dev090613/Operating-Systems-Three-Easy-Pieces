@@ -3,17 +3,18 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <sys/types.h>
 #include <fcntl.h>
 
 int main() {
 	
-	int fd = open("p2.output", O_CREAT | O_WRONLY | O_TRUNC, 644);
+	int fd = open("p2.output", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd == -1) {
 		fprintf(stderr, "Failed to open file\n");
 		exit(1);
 	}
 
-	int rc = fork();
+	pid_t rc = fork();
 	if (rc < 0){
 		fprintf(stderr, "Fork failed\n");
 		close(fd);

@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/types.h>
 
 int main() {
 	
-	int rc = fork();
+	pid_t rc = fork();
 	if (rc < 0) {
 		fprintf(stderr, "fork failed\n");
 		exit(1);

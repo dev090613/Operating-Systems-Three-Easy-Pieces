@@ -1,29 +1,26 @@
 #include <stdio.h>
 #include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 #include <stdlib.h>
+#include <sys/wait.h>
 
-int main() {
-	
-	pid_t rc = fork();
-	if (rc == -1) {
-		perror("fork failed");
-		exit(1);
-	} else if(rc == 0) {
-		// child process
-		if (close(STDOUT_FILENO) == -1) {
-			perror("close failed");
-			exit(1);
-		}
-		
-		printf("Hello, world.");
-		exit(0);
-	} else {
-		// parent process
-		wait(NULL);
-		printf("Child process completed.\n");
-	}
-	
-	return 0;
+int main(int argc, char *argv[]) {
+
+    pid_t rc = fork();
+    if (rc == -1) {
+        perror("fork failed.");
+        exit(1);
+    } else if (rc == 0) {
+        // child process
+        printf("This is...\n ");
+        close(STDOUT_FILENO);
+        printf("child process.\n");
+    } else {
+        // parent process
+        wait(NULL);
+        printf("\nThis is ...\n");
+        printf("parent process.\n");
+        printf("program completed.\n");
+    }
+
+    return 0;
 }

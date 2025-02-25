@@ -1,13 +1,14 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include <stdlib.h> // exit()
+#include <unistd.h> // getpid()
 #include <sys/wait.h>
+#include <sys/types.h> // pid_t
 
 int main() {
 	int x = 1;
 	printf("Initial value: %d\n", x);
 	printf("Main process PID: %d\n\n", (int)getpid());
-	int rc = fork();
+	pid_t rc = fork();
 	if (rc < 0) {
 		fprintf(stderr, "fork failed\n");
 		exit(1);
@@ -20,6 +21,7 @@ int main() {
 		wait(NULL);
 		printf("I am parent process(PID: %d)\n", (int) getpid());
 		printf("value of parent process: %i\n\n", x);
+        // wait(NULL);
 	}
 
 
